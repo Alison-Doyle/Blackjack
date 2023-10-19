@@ -24,3 +24,8 @@ King	10
 
 -> Go back and forward until dealer has more than 17 or goes bust
 	-> If over 17, compare score to player and participant w/ higher score wins
+
+---{ Breakdown }---
+-> Keep track of what cards have been played
+-> Keep track of score (Player class could double for user and dealer)
+-> Allow user to play again
