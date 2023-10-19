@@ -1,0 +1,26 @@
+---{ Card Values }---
+Ace	11 or 1 (The ace is valued @ 11 unless the hand will go over 21, then it's 1)
+Jack	10
+Queen	10
+King	10
+
+*All other card are face value
+
+---{ Rules }---
+-> Dealer and player start game w/ 2 cards each
+	-> Dealer has 1 card face down in case of black jack
+
+-> A starting hand of a 10 valued card and an Ace is called a Blackjack or natural and 
+	beats all hands other than another Blackjack. If both the player and dealer have
+	Blackjack, the result is a push (tie): neither the player nor the bank wins and
+	the bet is returned to the player.
+
+-> If player and dealer get 21 its a draw
+
+-> Dealer offers 2 cards to player until 
+	-> Player decides too stick (stick w/ what you have) or twist (get another card)
+	-> If player sticks, dealer gets 2 cards
+	-> Player can receive a card till 
+
+-> Go back and forward until dealer has more than 17 or goes bust
+	-> If over 17, compare score to player and participant w/ higher score wins
