@@ -29,3 +29,11 @@ King	10
 -> Keep track of what cards have been played
 -> Keep track of score (Player class could double for user and dealer)
 -> Allow user to play again
+-> Use enums for card values???
+
+---{ Order of Events }---
+-> 1 card give 2 everyplayer (start w/ user getting a card)
+-> Another card give to evenry player (dont say what card this is)
+-> Player gets chance to play
+	-> player can hit/twist or stand to end turn
+-> Dealer checks if they have blackjack (auto win if true)

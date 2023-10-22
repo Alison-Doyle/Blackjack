@@ -15,5 +15,12 @@
         }
 
         // Methods
+        public void ReceiveCards()
+        {
+            Random cardSelect = new Random();
+
+            long card = cardSelect.NextInt64(1, 14);
+            Console.WriteLine(card);
+        }
     }
 }

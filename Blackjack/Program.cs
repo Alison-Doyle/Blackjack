@@ -7,7 +7,6 @@ namespace Blackjack
         static void Main(string[] args)
         {
             // Creating players
-            Player dealer = new Player("Dealer");
             Player user = new Player(CreateUser());
 
             // Start and continue game
@@ -15,6 +14,8 @@ namespace Blackjack
 
             do
             {
+                InitialiseDecks(user);
+
                 continuePlaying = CheckIfUserWantsToPlayAgain();
             }
             while (continuePlaying == true);
@@ -49,6 +50,17 @@ namespace Blackjack
             return name;
         }
         
+        static void InitialiseDecks(Player user)
+        {
+            const int StartingNumberOfCards = 2;
+
+            for (int i = 0; i < StartingNumberOfCards; i++)
+            {
+                user.ReceiveCards();
+            }
+        }
+
+        // NOTE: Might want to move this to user player
         static bool CheckIfUserWantsToPlayAgain()
         {
             bool playAgain = false;
@@ -82,6 +94,12 @@ namespace Blackjack
             while (validInput == false);
 
             return playAgain;
+        }
+    
+        static void ErrorMessage()
+        {
+            // Text color
+            ConsoleColor red = ConsoleColor.Red;
         }
     }
 }
