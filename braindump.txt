@@ -1,3 +1,6 @@
+NOTE:
+Create set of cards @ beginning of game. Shuffle (theres already a function) then pull the next card everytime there is a twist
+
 ---{ Card Values }---
 Ace	11 or 1 (The ace is valued @ 11 unless the hand will go over 21, then it's 1)
 Jack	10

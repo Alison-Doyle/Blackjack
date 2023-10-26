@@ -24,7 +24,9 @@ namespace Blackjack
                 // Let user stick or twist
                 do
                 {
-                    user.ReceiveCards();
+                    //user.ReceiveCards();
+                    Card test = new Card();
+                    WriteLine(test.ToString());
                     receiveAnotherCard = CheckIfPlayerWantsToStickOrTwist(user);
                 }
                 while (receiveAnotherCard == true);
