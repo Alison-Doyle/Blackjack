@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Blackjack
+﻿namespace Blackjack
 {
     internal class Messages
     {
@@ -28,7 +22,7 @@ namespace Blackjack
             Console.ForegroundColor = ConsoleColor.White;
 
             // Write error
-            Console.WriteLine($"{playerName} is playing");
+            Console.WriteLine($"\n{playerName} is playing");
 
             // Returning console text to normal
             Console.ResetColor();

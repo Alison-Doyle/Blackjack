@@ -7,37 +7,31 @@ namespace Blackjack
     {
         static void Main(string[] args)
         {
+            // Welcome user to game/application
+            GameWelcome();
+
             // Creating players
-            Player dealer = new Player("Dealer");
+            Dealer dealer = new Dealer();
             Player user = new Player(CreateUser());
 
-            // Start and continue game
-            bool continuePlaying;
-            bool receiveAnotherCard;
+            // Start game
+            GameLoop(user, dealer);
 
-            do
-            {
-                InitialiseDecks(user);
+            // Let user know application ha ended
+            WriteLine("Game ended. Thanks for playing!");
+        }
 
-                TurnMessage(user.Name);
+        static void GameWelcome()
+        {
+            // Formatting text
+            Console.BackgroundColor = ConsoleColor.Green;
+            Console.ForegroundColor = ConsoleColor.Black;
 
-                // Let user stick or twist
-                do
-                {
-                    //user.ReceiveCards();
-                    Card test = new Card();
-                    WriteLine(test.ToString());
-                    receiveAnotherCard = CheckIfPlayerWantsToStickOrTwist(user);
-                }
-                while (receiveAnotherCard == true);
+            // Write error
+            Console.WriteLine("\n---{ WELCOME TO BLACKJACK }---\n");
 
-                TurnMessage(dealer.Name);
-
-                continuePlaying = CheckIfUserWantsToPlayAgain();
-            }
-            while (continuePlaying == true);
-
-            WriteLine("End");
+            // Returning console text to normal
+            Console.ResetColor();
         }
 
         static string CreateUser()
@@ -57,7 +51,7 @@ namespace Blackjack
                 {
                     validName = false;
                     ErrorMessage("That name is not available. Please select another name.");
-                } 
+                }
                 else if (!String.IsNullOrWhiteSpace(name))
                 {
                     validName = true;
@@ -72,15 +66,99 @@ namespace Blackjack
 
             return name;
         }
-        
-        static void InitialiseDecks(Player user)
-        {
-            const int StartingNumberOfCards = 2;
 
-            for (int i = 0; i < StartingNumberOfCards; i++)
+        static void GameLoop(Player user, Player dealer)
+        {
+            List<Player> players = new List<Player>() { user, dealer };
+            bool continuePlaying = false;
+            bool receiveAnotherCard;
+
+            do
             {
-                user.ReceiveCards();
+                // Make sure players' scores are 0 when game (re)starts
+                for (int i = 0; i < players.Count; i++)
+                {
+                    players[i].ResetScore();
+                }
+
+                // Create deck for game. Will be radomised or "shuffled" as created due
+                // to using random class
+                List<Card> deck = CreatePlayingDeck();
+                int currentCardIndex = 0;
+
+                // Carry out turns for each player
+                for (int i = 0; i < players.Count; i++)
+                {
+                    // Let user know who's turn it is
+                    TurnMessage(players[i].Name);
+
+                    // Give player cards if they wish
+                    do
+                    {
+                        players[i].ReceiveCard(deck[currentCardIndex]);
+                        WriteLine($"{players[i].Name} has received {deck[currentCardIndex]}");
+                        currentCardIndex++;
+                    }
+                    while (players[i].StickOrTwist());
+
+                    // Let user know what the scores are
+                    WriteLine($"{players[i].Name}'s score is {players[i].Score}");
+                }
+
+                // Deciding on winner
+                string winner;
+                if (user.Score > dealer.Score)
+                {
+                    winner = user.Name;
+                }
+                else
+                {
+                    winner = dealer.Name;
+                }
+
+                WriteLine($"{winner} wins!");
+
+                continuePlaying = CheckIfUserWantsToPlayAgain();
             }
+            while (continuePlaying == true);
+        }
+
+        static List<Card> CreatePlayingDeck()
+        {
+            const int CardsInDeck = 52;
+            List<Card> deck = new List<Card>();
+
+            // Populating deck w/ defined number of cards
+            for (int i = 0; i < CardsInDeck; i++)
+            {
+                bool cardExists = false;
+                Card newCard;
+
+                do
+                {
+                    // Create card
+                    newCard = new Card();
+
+                    // Check if card exists
+                    for (int j = 0; j < deck.Count; j++)
+                    {
+                        if ((deck[j].Suit == newCard.Suit) && (deck[j].FaceValue == newCard.FaceValue))
+                        {
+                            cardExists = true;
+                        }
+                        else
+                        {
+                            cardExists = false;
+                        }
+                    }
+                }
+                while (cardExists == true);
+
+                // Add card to deck
+                deck.Add(newCard);
+            }
+
+            return deck;
         }
 
         // NOTE: Might want to move this to user player
@@ -117,41 +195,6 @@ namespace Blackjack
             while (validInput == false);
 
             return playAgain;
-        }
-    
-        static bool CheckIfPlayerWantsToStickOrTwist(Player player)
-        {
-            bool playerWouldLikeAnotherCard = false;
-            bool validInput;
-
-            do
-            {
-                // Get user input
-                WriteLine("Would you like to stick or twist?");
-                string input = ReadLine();
-
-                // Give user option of reentering response until its valid
-                if ((!String.IsNullOrWhiteSpace(input)) && (input.ToUpper() == "T") || (input.ToUpper() == "TWIST") || (input.ToUpper() == "S") || (input.ToUpper() == "STICK"))
-                {
-                    validInput = true;
-                    if ((input.ToUpper() == "S") || (input.ToUpper() == "STICK"))
-                    {
-                        playerWouldLikeAnotherCard = false;
-                    }
-                    else
-                    {
-                        playerWouldLikeAnotherCard = true;
-                    }
-                }
-                else
-                {
-                    validInput = false;
-                    ErrorMessage("Invalid option entered. Please follow the instructions on screen");
-                }
-            }
-            while (validInput == false);
-
-            return playerWouldLikeAnotherCard;
         }
     }
 }
