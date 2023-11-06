@@ -27,5 +27,17 @@
             // Returning console text to normal
             Console.ResetColor();
         }
+
+        public static void InformationMessage(string message)
+        {
+            // Formatting text
+            Console.ForegroundColor = ConsoleColor.Green;
+
+            // Write error
+            Console.WriteLine($"\n{message}\n");
+
+            // Returning console text to normal
+            Console.ResetColor();
+        }
     }
 }

@@ -18,7 +18,7 @@ namespace Blackjack
             GameLoop(user, dealer);
 
             // Let user know application ha ended
-            WriteLine("Game ended. Thanks for playing!");
+            InformationMessage("Game ended. Thanks for playing!");
         }
 
         static void GameWelcome()
@@ -70,8 +70,8 @@ namespace Blackjack
         static void GameLoop(Player user, Player dealer)
         {
             List<Player> players = new List<Player>() { user, dealer };
+            const int NumberOfCardInHandAtBeginning = 2;
             bool continuePlaying = false;
-            bool receiveAnotherCard;
 
             do
             {
@@ -81,7 +81,7 @@ namespace Blackjack
                     players[i].ResetScore();
                 }
 
-                // Create deck for game. Will be radomised or "shuffled" as created due
+                // Create deck for game. Will be randomised or "shuffled" as created due
                 // to using random class
                 List<Card> deck = CreatePlayingDeck();
                 int currentCardIndex = 0;
@@ -92,17 +92,26 @@ namespace Blackjack
                     // Let user know who's turn it is
                     TurnMessage(players[i].Name);
 
-                    // Give player cards if they wish
-                    do
+                    // Initialise hand w/  cards
+                    for (int j = 0; j < NumberOfCardInHandAtBeginning; j++)
                     {
                         players[i].ReceiveCard(deck[currentCardIndex]);
                         WriteLine($"{players[i].Name} has received {deck[currentCardIndex]}");
                         currentCardIndex++;
                     }
-                    while (players[i].StickOrTwist());
+
+                    InformationMessage($"{players[i].Name}'s initial hand it worth {players[i].Score}");
+
+                    // Give player cards if they wish
+                    while (players[i].StickOrTwist()) 
+                    {
+                        players[i].ReceiveCard(deck[currentCardIndex]);
+                        WriteLine($"{players[i].Name} has received {deck[currentCardIndex]}");
+                        currentCardIndex++;
+                    }
 
                     // Let user know what the scores are
-                    WriteLine($"{players[i].Name}'s score is {players[i].Score}");
+                    InformationMessage($"{players[i].Name}'s score is {players[i].Score}");
                 }
 
                 // Deciding on winner
@@ -161,7 +170,6 @@ namespace Blackjack
             return deck;
         }
 
-        // NOTE: Might want to move this to user player
         static bool CheckIfUserWantsToPlayAgain()
         {
             bool playAgain = false;
