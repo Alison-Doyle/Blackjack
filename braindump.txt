@@ -1,3 +1,6 @@
+NOTE:
+Create set of cards @ beginning of game. Shuffle (theres already a function) then pull the next card everytime there is a twist
+
 ---{ Card Values }---
 Ace	11 or 1 (The ace is valued @ 11 unless the hand will go over 21, then it's 1)
 Jack	10
@@ -29,3 +32,11 @@ King	10
 -> Keep track of what cards have been played
 -> Keep track of score (Player class could double for user and dealer)
 -> Allow user to play again
+-> Use enums for card values???
+
+---{ Order of Events }---
+-> 1 card give 2 everyplayer (start w/ user getting a card)
+-> Another card give to evenry player (dont say what card this is)
+-> Player gets chance to play
+	-> player can hit/twist or stand to end turn
+-> Dealer checks if they have blackjack (auto win if true)
