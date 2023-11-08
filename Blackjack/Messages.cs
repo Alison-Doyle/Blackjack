@@ -9,10 +9,11 @@
             Console.ForegroundColor = ConsoleColor.White;
 
             // Write error
-            Console.WriteLine("Error: " + message);
+            Console.Write($"Error: {message}");
 
             // Returning console text to normal
             Console.ResetColor();
+            Console.WriteLine();
         }
 
         public static void TurnMessage(string playerName)
@@ -21,11 +22,12 @@
             Console.BackgroundColor = ConsoleColor.Blue;
             Console.ForegroundColor = ConsoleColor.White;
 
-            // Write error
-            Console.WriteLine($"\n{playerName} is playing");
+            // Write whose turn it is
+            Console.Write($"{playerName} is playing");
 
             // Returning console text to normal
             Console.ResetColor();
+            Console.WriteLine();
         }
 
         public static void InformationMessage(string message)
@@ -33,8 +35,8 @@
             // Formatting text
             Console.ForegroundColor = ConsoleColor.Green;
 
-            // Write error
-            Console.WriteLine($"\n{message}\n");
+            // Write message
+            Console.WriteLine($"{message}\n");
 
             // Returning console text to normal
             Console.ResetColor();

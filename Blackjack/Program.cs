@@ -75,59 +75,54 @@ namespace Blackjack
 
             do
             {
-                // Make sure players' scores are 0 when game (re)starts
+                // Create playing deck
+                List<Card> playingDeck = CreatePlayingDeck();
+                int currentCardIndex = 0;
+
+                for (int i = 0; i < players.Count; i++)
+                {
+                    // NOTE: Messages seem to be thrown off by \n so using black WriteLine()s for spacing
+                    WriteLine();
+                    TurnMessage(players[i].Name);
+
+                    // Initialise player's hand
+                    for (int j = 0; j < NumberOfCardInHandAtBeginning; j++)
+                    {
+                        players[i].ReceiveCard(playingDeck[currentCardIndex]);
+                        WriteLine($"{players[i].Name} has received {playingDeck[currentCardIndex]}");
+                        currentCardIndex++;
+                    }
+
+                    // Let user know initial status of player
+                    InformationMessage($"{players[i].Name}'s initial hand is worth {players[i].Score}");
+
+                    // Let user stick or twist
+                    while (players[i].StickOrTwist())
+                    {
+                        players[i].ReceiveCard(playingDeck[currentCardIndex]);
+                        WriteLine($"{players[i].Name} has received {playingDeck[currentCardIndex]}");
+                        currentCardIndex++;
+                    }
+
+                    // Update user on current status of player
+                    InformationMessage($"{players[i].Name}'s score is {players[i].Score}");
+                    if (players[i].Score > 21)
+                    {
+                        InformationMessage($"{players[i].Name} has gone bust! (Their score has gone over 21)");
+                    }
+                }
+
+                // Find and display winner
+                GetWinners(players);
+
+                continuePlaying = CheckIfUserWantsToPlayAgain();
+
+                // Reset scores incase user wants to play again
                 for (int i = 0; i < players.Count; i++)
                 {
                     players[i].ResetScore();
                 }
 
-                // Create deck for game. Will be randomised or "shuffled" as created due
-                // to using random class
-                List<Card> deck = CreatePlayingDeck();
-                int currentCardIndex = 0;
-
-                // Carry out turns for each player
-                for (int i = 0; i < players.Count; i++)
-                {
-                    // Let user know who's turn it is
-                    TurnMessage(players[i].Name);
-
-                    // Initialise hand w/  cards
-                    for (int j = 0; j < NumberOfCardInHandAtBeginning; j++)
-                    {
-                        players[i].ReceiveCard(deck[currentCardIndex]);
-                        WriteLine($"{players[i].Name} has received {deck[currentCardIndex]}");
-                        currentCardIndex++;
-                    }
-
-                    InformationMessage($"{players[i].Name}'s initial hand it worth {players[i].Score}");
-
-                    // Give player cards if they wish
-                    while (players[i].StickOrTwist()) 
-                    {
-                        players[i].ReceiveCard(deck[currentCardIndex]);
-                        WriteLine($"{players[i].Name} has received {deck[currentCardIndex]}");
-                        currentCardIndex++;
-                    }
-
-                    // Let user know what the scores are
-                    InformationMessage($"{players[i].Name}'s score is {players[i].Score}");
-                }
-
-                // Deciding on winner
-                string winner;
-                if (user.Score > dealer.Score)
-                {
-                    winner = user.Name;
-                }
-                else
-                {
-                    winner = dealer.Name;
-                }
-
-                WriteLine($"{winner} wins!");
-
-                continuePlaying = CheckIfUserWantsToPlayAgain();
             }
             while (continuePlaying == true);
         }
@@ -203,6 +198,43 @@ namespace Blackjack
             while (validInput == false);
 
             return playAgain;
+        }
+
+        static void GetWinners(List<Player> players)
+        {
+            string winnersName = "";
+            int numberOfWinners = 0;
+
+            // Sort scores w/ highest 1st (will work w/ any amount of players and increases scalability)
+            players.Sort();
+
+            int index = 0;
+            do
+            {
+                if (index > players.Count)
+                {
+                    numberOfWinners = 2;
+                }
+                else if (players[index].Score <= 21)
+                {
+                    winnersName = players[index].Name;
+                    numberOfWinners++;
+                }
+
+                index++;
+            }
+            while (numberOfWinners == 0);
+
+
+            // Print result
+            if (numberOfWinners >= 2)
+            {
+                InformationMessage("Draw!");
+            }
+            else
+            {
+                InformationMessage($"{winnersName} Wins!");
+            }
         }
     }
 }
