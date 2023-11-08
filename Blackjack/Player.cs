@@ -3,7 +3,7 @@ using static Blackjack.Messages;
 
 namespace Blackjack
 {
-    internal class Player
+    internal class Player : IComparable<Player>
     {
         // Attributes
         public string Name { get; set; }
@@ -57,7 +57,7 @@ namespace Blackjack
         {
             if (cardReceived.FaceValue == "Ace")
             {
-                if ((Score + 11) < 21)
+                if ((Score + 11) <= 21)
                 {
                     Score += 11;
                 }
@@ -79,6 +79,11 @@ namespace Blackjack
         public void ResetScore()
         {
             Score = 0;
+        }
+
+        public int CompareTo(Player? other)
+        {
+            return other.Score.CompareTo(this.Score);
         }
 
         public override string ToString()
