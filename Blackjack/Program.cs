@@ -18,10 +18,11 @@ namespace Blackjack
 
             // Application loop
             const int ExitPrompt = 3;
-            int userChoice = 0;
+            int userChoice;
 
             do
             {
+                // Let user pick which action they want to take w/ a menu
                 userChoice = SelectProgramAction();
 
                 switch (userChoice)
@@ -39,6 +40,7 @@ namespace Blackjack
             while (userChoice != ExitPrompt);
 
             // Let user know application ha ended
+            WriteLine();
             InformationMessage("Application ended. See you soon!");
         }
 
@@ -125,9 +127,7 @@ namespace Blackjack
             }
 
             // Calculation
-            double winPercentage = (numberOfWins / numberOfGames) * 100;
-
-            return winPercentage;
+            return (numberOfWins / numberOfGames) * 100;
         }
         #endregion
 
@@ -136,7 +136,7 @@ namespace Blackjack
         {
             List<Player> players = new List<Player>() { user, dealer };
             const int NumberOfCardInHandAtBeginning = 2;
-            bool continuePlaying = false;
+            bool continuePlaying;
 
             do
             {
@@ -149,7 +149,7 @@ namespace Blackjack
 
                 for (int i = 0; i < players.Count; i++)
                 {
-                    // NOTE: Messages seem to be thrown off by \n so using black WriteLine()s for spacing
+                    // NOTE: Messages seem to be thrown off by \n so using blank WriteLine()s for spacing
                     WriteLine();
                     TurnMessage(players[i].Name);
 
