@@ -10,25 +10,79 @@ namespace Blackjack
             // Welcome user to game/application
             BoldInformationMessage("BLACKJACK CONSOLE GAME");
 
-            //// Creating players
-            //Dealer dealer = new Dealer();
-            //Player user = new Player(CreateUser());
+            // Creating players
+            Dealer dealer = new Dealer();
+            Player user = new Player(CreateUser());
 
             //// Start game
             //GameLoop(user, dealer);
 
-            DisplayPlayerHistory();
+            // Application loop
+            const int ExitPrompt = 3;
+            int userChoice = 0;
+
+            do
+            {
+                userChoice = DisplayMenu();
+
+                switch (userChoice)
+                {
+                    case 1:
+                        GameLoop(user, dealer);
+                        break;
+                    case 2:
+                        DisplayPlayerHistory(user.Name);
+                        break;
+                    default:
+                        break;
+                }
+            }
+            while (userChoice != ExitPrompt);
+
+            DisplayMenu();
 
             // Let user know application ha ended
             InformationMessage("Game ended. Thanks for playing!");
         }
 
-        static void DisplayMenu()
+        static int DisplayMenu()
         {
+            string[] MenuItems = { "Start Game", "History", "Exit" };
 
+            // Print Menu
+            for (int i = 0; i < MenuItems.Length; i++)
+            {
+                WriteLine($"{i+1}. {MenuItems[i]}");
+            }
+
+            // Getting input
+            bool validInput;
+            int userChoice = 0;
+
+            do
+            {
+                // Get user input
+                WriteLine("Please enter the number of the option you wish to select:");
+                string input = ReadLine();
+
+                // Give user option of reentering response until its valid
+                if ((int.TryParse(input, out int selectedInput)) && (selectedInput <= MenuItems.Length) && (selectedInput > 0))
+                {
+                    validInput = true;
+                    userChoice = selectedInput;
+                }
+                else
+                {
+                    validInput = false;
+                    ErrorMessage("Invalid option entered. Please follow the instructions on screen");
+                }
+            }
+            while (validInput == false);
+
+            return userChoice;
         }
 
-        static void DisplayPlayerHistory()
+        static void DisplayPlayerHistory(string playerName)
         {
             OutputEncoding = System.Text.Encoding.UTF8;
 
@@ -41,14 +95,17 @@ namespace Blackjack
             WriteLine(TableFormatting, "Name", "Date", "Result");
             for (int i = 0; i < gameRecords.Count; i++)
             {
-                WriteLine(TableFormatting, gameRecords[i].PlayerName, gameRecords[i].DateOfGame, gameRecords[i].Result);
+                if (gameRecords[i].PlayerName.ToUpper() == playerName.ToUpper())
+                {
+                    WriteLine(TableFormatting, gameRecords[i].PlayerName, gameRecords[i].DateOfGame, gameRecords[i].Result);
+                }
             }
 
             // Print win percentage
-            InformationMessage($"Your win percentage is {CalculateWinPercentage(gameRecords):f2}%;");
+            InformationMessage($"Your win percentage is {CalculateWinPercentage(gameRecords, playerName):f2}%;");
         }
 
-        static double CalculateWinPercentage(List<GameRecord> gameRecords)
+        static double CalculateWinPercentage(List<GameRecord> gameRecords, string playerName)
         {
             double numberOfWins = 0;
             double numberOfGames = 0;
@@ -56,11 +113,14 @@ namespace Blackjack
             // Count nember of games and wins
             for (int i = 0; i < gameRecords.Count; i++)
             {
-                numberOfGames++;
-
-                if (gameRecords[i].Result == "Win")
+                if (gameRecords[i].PlayerName.ToUpper() == playerName.ToUpper())
                 {
-                    numberOfWins++;
+                    numberOfGames++;
+
+                    if (gameRecords[i].Result == "Win")
+                    {
+                        numberOfWins++;
+                    }
                 }
             }
 
