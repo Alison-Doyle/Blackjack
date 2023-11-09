@@ -5,7 +5,7 @@ This is a console based version of the card game Blackjack (also known as 21). T
 
 ## Features
 - Custom messages
-- Can save win history of multiple users and display win percntage
+- Can save win history of multiple users and display win percntage (use player name "Alison" to test history)
 
 ## Commit Key
 
