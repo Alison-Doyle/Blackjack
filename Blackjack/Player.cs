@@ -23,32 +23,35 @@ namespace Blackjack
             bool playerWouldLikeAnotherCard = false;
             bool validInput;
 
-            do
+            if (Score < 21)
             {
-                // Get user input
-                WriteLine("Would you like to stick or twist?");
-                string input = ReadLine();
-
-                // Give user option of reentering response until its valid
-                if ((!String.IsNullOrWhiteSpace(input)) && (input.ToUpper() == "T") || (input.ToUpper() == "TWIST") || (input.ToUpper() == "S") || (input.ToUpper() == "STICK"))
+                do
                 {
-                    validInput = true;
-                    if ((input.ToUpper() == "S") || (input.ToUpper() == "STICK"))
+                    // Get user input
+                    WriteLine("Would you like to stick or twist?");
+                    string input = ReadLine();
+
+                    // Give user option of reentering response until its valid
+                    if ((!String.IsNullOrWhiteSpace(input)) && (input.ToUpper() == "T") || (input.ToUpper() == "TWIST") || (input.ToUpper() == "S") || (input.ToUpper() == "STICK"))
                     {
-                        playerWouldLikeAnotherCard = false;
+                        validInput = true;
+                        if ((input.ToUpper() == "S") || (input.ToUpper() == "STICK"))
+                        {
+                            playerWouldLikeAnotherCard = false;
+                        }
+                        else
+                        {
+                            playerWouldLikeAnotherCard = true;
+                        }
                     }
                     else
                     {
-                        playerWouldLikeAnotherCard = true;
+                        validInput = false;
+                        ErrorMessage("Invalid option entered. Please follow the instructions on screen");
                     }
                 }
-                else
-                {
-                    validInput = false;
-                    ErrorMessage("Invalid option entered. Please follow the instructions on screen");
-                }
+                while (validInput == false);
             }
-            while (validInput == false);
 
             return playerWouldLikeAnotherCard;
         } 
