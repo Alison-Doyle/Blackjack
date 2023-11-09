@@ -17,11 +17,25 @@ namespace Blackjack
             //// Start game
             //GameLoop(user, dealer);
 
-            PlayerRecords records = new PlayerRecords();
-            records.FetchData();
+            List<GameRecord> gameRecords = FileHandling.FetchDataFromCsv();
+
+            for (int i = 0; i < gameRecords.Count; i++)
+            {
+                Console.WriteLine(gameRecords[i].ToString());
+            }
 
             // Let user know application ha ended
             InformationMessage("Game ended. Thanks for playing!");
+        }
+
+        static void DisplayMenu()
+        {
+
+        }
+
+        static void DisplayPlayerHistory()
+        {
+
         }
 
         static string CreateUser()
