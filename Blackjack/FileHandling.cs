@@ -37,5 +37,19 @@ namespace Blackjack
 
             return records;
         }
+
+        public static void SaveGameDetailsToCsv(string playerName, string result)
+        {
+            string gameData = $"\n{playerName},{DateOnly.FromDateTime(DateTime.Now)},{result}";
+
+            try
+            {
+                File.AppendAllText(FilePath, gameData);
+            }
+            catch (Exception exception) 
+            {
+                ErrorMessage(exception.Message);
+            }
+        }
     }
 }
