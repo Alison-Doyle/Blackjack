@@ -10,12 +10,15 @@ namespace Blackjack
             // Welcome user to game/application
             BoldInformationMessage("BLACKJACK CONSOLE GAME");
 
-            // Creating players
-            Dealer dealer = new Dealer();
-            Player user = new Player(CreateUser());
+            //// Creating players
+            //Dealer dealer = new Dealer();
+            //Player user = new Player(CreateUser());
 
-            // Start game
-            GameLoop(user, dealer);
+            //// Start game
+            //GameLoop(user, dealer);
+
+            PlayerRecords records = new PlayerRecords();
+            records.FetchData();
 
             // Let user know application ha ended
             InformationMessage("Game ended. Thanks for playing!");
