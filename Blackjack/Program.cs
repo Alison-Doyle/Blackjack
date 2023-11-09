@@ -8,7 +8,7 @@ namespace Blackjack
         static void Main(string[] args)
         {
             // Welcome user to game/application
-            GameWelcome();
+            BoldInformationMessage("BLACKJACK CONSOLE GAME");
 
             // Creating players
             Dealer dealer = new Dealer();
@@ -19,19 +19,6 @@ namespace Blackjack
 
             // Let user know application ha ended
             InformationMessage("Game ended. Thanks for playing!");
-        }
-
-        static void GameWelcome()
-        {
-            // Formatting text
-            Console.BackgroundColor = ConsoleColor.Green;
-            Console.ForegroundColor = ConsoleColor.Black;
-
-            // Write error
-            Console.WriteLine("\n---{ WELCOME TO BLACKJACK }---\n");
-
-            // Returning console text to normal
-            Console.ResetColor();
         }
 
         static string CreateUser()
@@ -75,6 +62,9 @@ namespace Blackjack
 
             do
             {
+                // Letting user know game has started
+                BoldInformationMessage("Game Start");
+
                 // Create playing deck
                 List<Card> playingDeck = CreatePlayingDeck();
                 int currentCardIndex = 0;
@@ -204,35 +194,38 @@ namespace Blackjack
         {
             string winnersName = "";
             int numberOfWinners = 0;
+            int highestScore = 0;
 
-            // Sort scores w/ highest 1st (will work w/ any amount of players and increases scalability)
-            players.Sort();
-
-            int index = 0;
-            do
+            for (int i = 0; i < players.Count; i++)
             {
-                if (index > players.Count)
+                // Filters out any players that have gone bust (if all have gone bust there will be no winners
+                // and a draw)
+                if (players[i].Score <= 21)
                 {
-                    numberOfWinners = 2;
+                    // If only 1 person has the highest score, they will be the winner and their name will be
+                    // recorded else there will be a draw
+                    if (players[i].Score > highestScore)
+                    {
+                        highestScore = players[i].Score;
+                        winnersName = players[i].Name;
+                        numberOfWinners = 1;
+                    }
+                    else if (players[i].Score == highestScore)
+                    {
+                        numberOfWinners++;
+                    }
                 }
-                else if (players[index].Score <= 21)
-                {
-                    winnersName = players[index].Name;
-                    numberOfWinners++;
-                }
-
-                index++;
             }
-            while (numberOfWinners == 0);
-
 
             // Print result
-            if (numberOfWinners >= 2)
+            if ((numberOfWinners > 1) || (numberOfWinners == 0))
             {
+                WriteLine();
                 InformationMessage("Draw!");
             }
             else
             {
+                WriteLine();
                 InformationMessage($"{winnersName} Wins!");
             }
         }
