@@ -14,46 +14,122 @@ namespace Blackjack
             Dealer dealer = new Dealer();
             Player user = new Player(CreateUser());
 
-            // Start game
-            GameLoop(user, dealer);
+            // Application loop
+            const int ExitPrompt = 3;
+            int userChoice = 0;
+
+            do
+            {
+                userChoice = DisplayMenu();
+
+                switch (userChoice)
+                {
+                    case 1:
+                        GameLoop(user, dealer);
+                        break;
+                    case 2:
+                        DisplayPlayerHistory(user.Name);
+                        break;
+                    default:
+                        break;
+                }
+            }
+            while (userChoice != ExitPrompt);
+
+            DisplayMenu();
 
             // Let user know application ha ended
             InformationMessage("Game ended. Thanks for playing!");
         }
 
-        static string CreateUser()
+        static int DisplayMenu()
         {
-            const string ComputerUserName = "DEALER";
-            string name;
-            bool validName;
+            string[] MenuItems = { "Start Game", "History", "Exit" };
+
+            // Print Menu
+            for (int i = 0; i < MenuItems.Length; i++)
+            {
+                WriteLine($"{i+1}. {MenuItems[i]}");
+            }
+
+            // Getting input
+            bool validInput;
+            int userChoice = 0;
 
             do
             {
-                // Getting user to input a name
-                Write("Please enter your name:\t");
-                name = ReadLine();
+                // Get user input
+                WriteLine("Please enter the number of the option you wish to select:");
+                string input = ReadLine();
 
-                // Validating they put in a name and that its not reserved
-                if (name.ToUpper() == ComputerUserName)
+                // Give user option of reentering response until its valid
+                if ((int.TryParse(input, out int selectedInput)) && (selectedInput <= MenuItems.Length) && (selectedInput > 0))
                 {
-                    validName = false;
-                    ErrorMessage("That name is not available. Please select another name.");
-                }
-                else if (!String.IsNullOrWhiteSpace(name))
-                {
-                    validName = true;
+                    validInput = true;
+                    userChoice = selectedInput;
                 }
                 else
                 {
-                    validName = false;
-                    ErrorMessage("No name was entered. Please enter a name before continuing.");
+                    validInput = false;
+                    ErrorMessage("Invalid option entered. Please follow the instructions on screen");
                 }
             }
-            while (validName == false);
+            while (validInput == false);
 
-            return name;
+            return userChoice;
         }
 
+        #region Player History
+        static void DisplayPlayerHistory(string playerName)
+        {
+            OutputEncoding = System.Text.Encoding.UTF8;
+
+            const string TableFormatting = "{0,-20}{1,-20}{2,-5}";
+
+            // Get game records
+            List<GameRecord> gameRecords = FileHandling.FetchDataFromCsv();
+
+            // Printing table
+            WriteLine(TableFormatting, "Name", "Date", "Result");
+            for (int i = 0; i < gameRecords.Count; i++)
+            {
+                if (gameRecords[i].PlayerName.ToUpper() == playerName.ToUpper())
+                {
+                    WriteLine(TableFormatting, gameRecords[i].PlayerName, gameRecords[i].DateOfGame, gameRecords[i].Result);
+                }
+            }
+
+            // Print win percentage
+            InformationMessage($"Your win percentage is {CalculateWinPercentage(gameRecords, playerName):f2}%;");
+        }
+
+        static double CalculateWinPercentage(List<GameRecord> gameRecords, string playerName)
+        {
+            double numberOfWins = 0;
+            double numberOfGames = 0;
+
+            // Count member of games and wins
+            for (int i = 0; i < gameRecords.Count; i++)
+            {
+                if (gameRecords[i].PlayerName.ToUpper() == playerName.ToUpper())
+                {
+                    numberOfGames++;
+
+                    if (gameRecords[i].Result == "Win")
+                    {
+                        numberOfWins++;
+                    }
+                }
+            }
+
+            // Calculation
+            double winPercentage = (numberOfWins / numberOfGames) * 100;
+
+            return winPercentage;
+        }
+        #endregion
+
+        #region Game Logic
         static void GameLoop(Player user, Player dealer)
         {
             List<Player> players = new List<Player>() { user, dealer };
@@ -195,6 +271,7 @@ namespace Blackjack
             string winnersName = "";
             int numberOfWinners = 0;
             int highestScore = 0;
+            string result;
 
             for (int i = 0; i < players.Count; i++)
             {
@@ -222,12 +299,57 @@ namespace Blackjack
             {
                 WriteLine();
                 InformationMessage("Draw!");
+                result = "Draw";
             }
             else
             {
                 WriteLine();
                 InformationMessage($"{winnersName} Wins!");
+                if (winnersName.ToUpper() != "DEALER")
+                {
+                    result = "Win";
+                }
+                else
+                {
+                    result = "Loose";
+                }
             }
+
+            FileHandling.SaveGameDetailsToCsv(players[0].Name, result);
+        }
+        #endregion
+
+        static string CreateUser()
+        {
+            const string ComputerUserName = "DEALER";
+            string name;
+            bool validName;
+
+            do
+            {
+                // Getting user to input a name
+                Write("Please enter your name:\t");
+                name = ReadLine();
+
+                // Validating they put in a name and that its not reserved
+                if (name.ToUpper() == ComputerUserName)
+                {
+                    validName = false;
+                    ErrorMessage("That name is not available. Please select another name.");
+                }
+                else if (!String.IsNullOrWhiteSpace(name))
+                {
+                    validName = true;
+                }
+                else
+                {
+                    validName = false;
+                    ErrorMessage("No name was entered. Please enter a name before continuing.");
+                }
+            }
+            while (validName == false);
+
+            return name;
         }
     }
 }
