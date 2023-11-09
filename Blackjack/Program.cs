@@ -7,8 +7,10 @@ namespace Blackjack
     {
         static void Main(string[] args)
         {
+            OutputEncoding = System.Text.Encoding.Unicode;
+
             // Welcome user to game/application
-            BoldInformationMessage("BLACKJACK CONSOLE GAME");
+            BoldInformationMessage("♦♧♥♤ 𝐁𝐥𝐚𝐜𝐤𝐉𝐚𝐜𝐤 ♤♥♧♦");
 
             // Creating players
             Dealer dealer = new Dealer();
@@ -16,11 +18,12 @@ namespace Blackjack
 
             // Application loop
             const int ExitPrompt = 3;
-            int userChoice = 0;
+            int userChoice;
 
             do
             {
-                userChoice = DisplayMenu();
+                // Let user pick which action they want to take w/ a menu
+                userChoice = SelectProgramAction();
 
                 switch (userChoice)
                 {
@@ -36,17 +39,17 @@ namespace Blackjack
             }
             while (userChoice != ExitPrompt);
 
-            DisplayMenu();
-
             // Let user know application ha ended
-            InformationMessage("Game ended. Thanks for playing!");
+            WriteLine();
+            InformationMessage("Application ended. See you soon!");
         }
 
-        static int DisplayMenu()
+        static int SelectProgramAction()
         {
             string[] MenuItems = { "Start Game", "History", "Exit" };
 
             // Print Menu
+            BoldInformationMessage("Menu");
             for (int i = 0; i < MenuItems.Length; i++)
             {
                 WriteLine($"{i+1}. {MenuItems[i]}");
@@ -90,6 +93,7 @@ namespace Blackjack
             List<GameRecord> gameRecords = FileHandling.FetchDataFromCsv();
 
             // Printing table
+            BoldInformationMessage("History");
             WriteLine(TableFormatting, "Name", "Date", "Result");
             for (int i = 0; i < gameRecords.Count; i++)
             {
@@ -123,9 +127,7 @@ namespace Blackjack
             }
 
             // Calculation
-            double winPercentage = (numberOfWins / numberOfGames) * 100;
-
-            return winPercentage;
+            return (numberOfWins / numberOfGames) * 100;
         }
         #endregion
 
@@ -134,7 +136,7 @@ namespace Blackjack
         {
             List<Player> players = new List<Player>() { user, dealer };
             const int NumberOfCardInHandAtBeginning = 2;
-            bool continuePlaying = false;
+            bool continuePlaying;
 
             do
             {
@@ -147,7 +149,7 @@ namespace Blackjack
 
                 for (int i = 0; i < players.Count; i++)
                 {
-                    // NOTE: Messages seem to be thrown off by \n so using black WriteLine()s for spacing
+                    // NOTE: Messages seem to be thrown off by \n so using blank WriteLine()s for spacing
                     WriteLine();
                     TurnMessage(players[i].Name);
 
