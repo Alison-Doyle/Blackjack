@@ -1,2 +1,4 @@
 Player Name,Date,Result
 Alison,10/10/2023,Win
+John Doe,09/11/2023,Draw
+Peter,01/01/2001,Loose

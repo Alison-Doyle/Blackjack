@@ -17,12 +17,7 @@ namespace Blackjack
             //// Start game
             //GameLoop(user, dealer);
 
-            List<GameRecord> gameRecords = FileHandling.FetchDataFromCsv();
-
-            for (int i = 0; i < gameRecords.Count; i++)
-            {
-                Console.WriteLine(gameRecords[i].ToString());
-            }
+            DisplayPlayerHistory();
 
             // Let user know application ha ended
             InformationMessage("Game ended. Thanks for playing!");
@@ -35,7 +30,44 @@ namespace Blackjack
 
         static void DisplayPlayerHistory()
         {
+            OutputEncoding = System.Text.Encoding.UTF8;
 
+            const string TableFormatting = "{0,-20}{1,-20}{2,-5}";
+
+            // Get game records
+            List<GameRecord> gameRecords = FileHandling.FetchDataFromCsv();
+
+            // Printing table
+            WriteLine(TableFormatting, "Name", "Date", "Result");
+            for (int i = 0; i < gameRecords.Count; i++)
+            {
+                WriteLine(TableFormatting, gameRecords[i].PlayerName, gameRecords[i].DateOfGame, gameRecords[i].Result);
+            }
+
+            // Print win percentage
+            InformationMessage($"Your win percentage is {CalculateWinPercentage(gameRecords):f2}%;");
+        }
+
+        static double CalculateWinPercentage(List<GameRecord> gameRecords)
+        {
+            double numberOfWins = 0;
+            double numberOfGames = 0;
+
+            // Count nember of games and wins
+            for (int i = 0; i < gameRecords.Count; i++)
+            {
+                numberOfGames++;
+
+                if (gameRecords[i].Result == "Win")
+                {
+                    numberOfWins++;
+                }
+            }
+
+            // Calculation
+            double winPercentage = (numberOfWins / numberOfGames) * 100;
+
+            return winPercentage;
         }
 
         static string CreateUser()
