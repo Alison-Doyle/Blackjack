@@ -5,8 +5,7 @@
         public static void ErrorMessage(string message)
         {
             // Formatting text
-            Console.BackgroundColor = ConsoleColor.Red;
-            Console.ForegroundColor = ConsoleColor.White;
+            Console.ForegroundColor = ConsoleColor.Red;
 
             // Write error
             Console.Write($"Error: {message}");
@@ -52,7 +51,7 @@
             Console.ForegroundColor = ConsoleColor.Black;
 
             // Write message
-            Console.Write($"--<[ {message} ]>--");
+            Console.Write($"-----<[ {message} ]>-----");
 
             // Returning console text to normal
             Console.ResetColor();

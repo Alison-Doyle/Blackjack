@@ -7,8 +7,10 @@ namespace Blackjack
     {
         static void Main(string[] args)
         {
+            OutputEncoding = System.Text.Encoding.Unicode;
+
             // Welcome user to game/application
-            BoldInformationMessage("BLACKJACK CONSOLE GAME");
+            BoldInformationMessage("♦♧♥♤ 𝐁𝐥𝐚𝐜𝐤𝐉𝐚𝐜𝐤 ♤♥♧♦");
 
             // Creating players
             Dealer dealer = new Dealer();
@@ -20,7 +22,7 @@ namespace Blackjack
 
             do
             {
-                userChoice = DisplayMenu();
+                userChoice = SelectProgramAction();
 
                 switch (userChoice)
                 {
@@ -36,17 +38,16 @@ namespace Blackjack
             }
             while (userChoice != ExitPrompt);
 
-            DisplayMenu();
-
             // Let user know application ha ended
-            InformationMessage("Game ended. Thanks for playing!");
+            InformationMessage("Application ended. See you soon!");
         }
 
-        static int DisplayMenu()
+        static int SelectProgramAction()
         {
             string[] MenuItems = { "Start Game", "History", "Exit" };
 
             // Print Menu
+            BoldInformationMessage("Menu");
             for (int i = 0; i < MenuItems.Length; i++)
             {
                 WriteLine($"{i+1}. {MenuItems[i]}");
@@ -90,6 +91,7 @@ namespace Blackjack
             List<GameRecord> gameRecords = FileHandling.FetchDataFromCsv();
 
             // Printing table
+            BoldInformationMessage("History");
             WriteLine(TableFormatting, "Name", "Date", "Result");
             for (int i = 0; i < gameRecords.Count; i++)
             {
